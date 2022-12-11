@@ -25,4 +25,12 @@ router.post('/log-in', async (req, res) => {
     res.send(result);
 });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+router.put('/:userId', async (req, res) => {
+    const { name } = req.body;
+    const { userId } = req.params;
+    const result = await Logic.UserLogic.updateName(userId, name);
+    res.send(result);
+});
+
 export default router;

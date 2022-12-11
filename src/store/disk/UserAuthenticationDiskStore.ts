@@ -1,10 +1,10 @@
 import { UserAuthentication } from '../../types/user';
-import { UserAuthenticateStore } from '../UserAuthenticateStore';
+import { UserAuthenticationStore } from '../UserAuthenticationStore';
 import { load, save } from './functions';
 
 const DISK_KEY = 'UserAuthentication';
 
-const UserAuthenticateDiskStore: UserAuthenticateStore = {
+const UserAuthenticationDiskStore: UserAuthenticationStore = {
     create: async (data: UserAuthentication) => {
         const dataset = await load<UserAuthentication>(DISK_KEY);
         dataset.push(data);
@@ -35,4 +35,4 @@ const UserAuthenticateDiskStore: UserAuthenticateStore = {
     }
 };
 
-export default UserAuthenticateDiskStore;
+export default UserAuthenticationDiskStore;

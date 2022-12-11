@@ -1,7 +1,11 @@
 # IntelliJ
 .idea
 
+# NPM
 node_modules
 
 # Yarn
 yarn-error.log
+
+# data
+src/store/disk/storage/*.json

@@ -1,0 +1,12 @@
+
+use alpagram;
+db.createUser(
+    {
+        user: "alpagram",
+        pwd: "alpagram",
+        roles: [
+            { role: "readWrite", db: "alpagram" }
+        ]
+    },
+    { w: "majority" , wtimeout: 5000 }
+)

@@ -42,8 +42,13 @@ const logout = async (id: string): Promise<void> => {
     return await Promise.resolve();
 };
 
+const updateName = async (id: string, name: string): Promise<void> => {
+    await Store.UserStore.update(id, { id, name });
+};
+
 export default {
     signUp,
     login,
-    logout
+    logout,
+    updateName
 };

@@ -1,7 +1,10 @@
-import * as UserAuthenticateStore from './UserAuthenticateStore';
+import * as UserAuthenticateStore from './UserAuthenticationStore';
 import * as UserStore from './UserStore';
+//
+import mongoConfiguration from './mongo/configuration';
 
 export default {
-    UserAuthenticateStore: UserAuthenticateStore.Disk,
-    UserStore: UserStore.Disk
+    configuration: mongoConfiguration,
+    UserAuthenticateStore: UserAuthenticateStore.Mongo,
+    UserStore: UserStore.Mongo
 };
