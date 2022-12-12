@@ -1,6 +1,6 @@
-import { User } from '../../types/user';
-import { load, save } from './functions';
-import { UserStore } from '../UserStore';
+import { User } from '../../../types/user';
+import { load, save } from '../functions';
+import { UserStore } from '../../user/UserStore';
 
 const DISK_KEY = 'User';
 
@@ -31,7 +31,8 @@ const UserDiskStore: UserStore = {
     },
     findById: async (id) => {
         const dataset = await load<User>(DISK_KEY);
-        return dataset.find(d => d.id === id);
+        const target = dataset.find(d => d.id === id);
+        return (target != null) ? target : null;
     }
 };
 

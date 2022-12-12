@@ -1,6 +1,6 @@
-import { UserAuthentication } from '../../types/user';
-import { UserAuthenticationStore } from '../UserAuthenticationStore';
-import { load, save } from './functions';
+import { UserAuthentication } from '../../../types/user';
+import { UserAuthenticationStore } from '../../user/UserAuthenticationStore';
+import { load, save } from '../functions';
 
 const DISK_KEY = 'UserAuthentication';
 
@@ -31,7 +31,8 @@ const UserAuthenticationDiskStore: UserAuthenticationStore = {
     },
     findById: async (id) => {
         const dataset = await load<UserAuthentication>(DISK_KEY);
-        return dataset.find(d => d.id === id);
+        const target = dataset.find(d => d.id === id);
+        return (target != null) ? target : null;
     }
 };
 

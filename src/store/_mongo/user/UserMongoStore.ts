@@ -1,25 +1,12 @@
-import { model, Schema } from 'mongoose';
+import { model } from 'mongoose';
 //
-import { UserStore } from '../UserStore';
-import { User } from '../../types/user';
+import { UserStore } from '../../user/UserStore';
+import ODM from './_odm/user';
 
 const Repository = model(
     'User',
-    new Schema({
-        _id: String,
-        name: String
-    },
-    {
-        collection: 'User'
-    }
-    ));
-
-const toDomain = (m: any): User => {
-    return {
-        id: m._id,
-        name: m.name
-    };
-};
+    ODM.schema
+);
 
 const UserMongoStore: UserStore = {
     create: async data => {
@@ -39,8 +26,7 @@ const UserMongoStore: UserStore = {
         return id;
     },
     findById: async id => {
-        const origin = await Repository.findById(id);
-        return toDomain(origin);
+        return ODM.mapper(await Repository.findById(id));
     }
 };
 

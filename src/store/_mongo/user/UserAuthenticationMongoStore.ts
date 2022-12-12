@@ -1,25 +1,12 @@
-import { model, Schema } from 'mongoose';
+import { model } from 'mongoose';
 //
-import { UserAuthenticationStore } from '../UserAuthenticationStore';
-import { UserAuthentication } from '../../types/user';
+import { UserAuthenticationStore } from '../../user/UserAuthenticationStore';
+import ODM from './_odm/userAuthentication';
 
 const Repository = model(
     'UserAuthentication',
-    new Schema({
-        _id: String,
-        password: String
-    },
-    {
-        collection: 'UserAuthentication'
-    }
-    ));
-
-const toDomain = (m: any): UserAuthentication => {
-    return {
-        id: m._id,
-        password: m.password
-    };
-};
+    ODM.schema
+);
 
 const UserAuthenticationMongoStore: UserAuthenticationStore = {
     create: async data => {
@@ -39,7 +26,7 @@ const UserAuthenticationMongoStore: UserAuthenticationStore = {
         return id;
     },
     findById: async id => {
-        return toDomain(await Repository.findById(id));
+        return ODM.mapper(await Repository.findById(id));
     }
 };
 

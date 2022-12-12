@@ -3,8 +3,8 @@ import Store from '../store';
 
 const signUp = async (id: string, name: string, password: string): Promise<string> => {
     // id check
-    const userWithSameId = await Store.UserStore.findById(id);
-    if (userWithSameId != null) {
+    const predefinedUser = await Store.UserStore.findById(id);
+    if (predefinedUser !== null) {
         throw new Error(`User with id(${id}} is already registered.`);
     }
     // register user
@@ -28,7 +28,7 @@ const login = async (id: string, password: string): Promise<User> => {
     }
     // find user
     const user = await Store.UserStore.findById(id);
-    if (user === undefined) {
+    if (user === null) {
         throw new Error('Unknown error occurs.');
     }
     // add session

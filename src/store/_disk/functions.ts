@@ -1,7 +1,7 @@
 import path from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 
-const genPath = (key: string): string => [__dirname, 'storage', key.concat('.json')].join(path.sep);
+const genPath = (key: string): string => [__dirname, '_storage', key.concat('.json')].join(path.sep);
 
 export const load = async <T> (key: string): Promise<T[]> => {
     try {
