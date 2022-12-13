@@ -3,10 +3,19 @@ import { Odm } from '../../odm';
 import { UserAuthentication } from '../../../../types/user';
 
 const odm: Odm<UserAuthentication> = {
-    mapper: queryResult => queryResult ?? ({
-        id: queryResult._id,
-        password: queryResult.password
-    }),
+    fromDoc: queryResult => queryResult === null
+        ? null
+        : ({
+            id: queryResult._id,
+            password: queryResult.password
+        }),
+    toDoc: userAuth => {
+        const { id, password } = userAuth;
+        return {
+            _id: id,
+            password
+        };
+    },
     schema: new Schema({
         _id: String,
         password: String

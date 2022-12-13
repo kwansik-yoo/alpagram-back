@@ -1,9 +1,8 @@
-import { User } from '../types/user';
 import Store from '../store';
 import { randomUUID } from 'crypto';
 
 const send = async (
-    writer: User,
+    writerId: string,
     message: string,
     roomId: string,
     initial: boolean = false
@@ -13,7 +12,7 @@ const send = async (
         id,
         regTime: new Date().getTime(),
         modTime: 0,
-        writer,
+        writer: { id: writerId, name: '' },
         message,
         roomId
     });
@@ -27,7 +26,7 @@ const send = async (
 };
 
 const sendFirstDirectMessage = async (
-    writer: User,
+    writerId: string,
     message: string,
     receiverId: string
 ): Promise<string> => {
@@ -36,24 +35,25 @@ const sendFirstDirectMessage = async (
         id: roomId,
         offset: 0,
         type: 'direct',
-        elice: writer,
+        elice: { id: writerId, name: '' },
         bob: { id: receiverId, name: '' }
     });
+
     // FIXME: Event:DirectRoomCreatedEvent
     await Store.ReadOffsetStore.createAll(
-        [writer.id, receiverId].map(id => ({
+        [writerId, receiverId].map(id => ({
             id: id.concat('@', roomId),
             userId: id,
             roomId,
-            offset: id === writer.id ? 0 : -1
+            offset: id === writerId ? 0 : -1
         }))
     );
-    await send(writer, message, roomId, true);
+    await send(writerId, message, roomId, true);
     return roomId;
 };
 
 const sendFirstGroupMessage = async (
-    writer: User,
+    writerId: string,
     message: string,
     memberIds: string[]
 ): Promise<string> => {
@@ -62,20 +62,20 @@ const sendFirstGroupMessage = async (
         id: roomId,
         offset: 0,
         type: 'group',
-        owner: writer,
-        admins: [writer],
-        members: [writer].concat(memberIds.map(id => ({ id, name: '' })))
+        owner: { id: writerId, name: '' },
+        admins: [{ id: writerId, name: '' }],
+        members: [{ id: writerId, name: '' }].concat(memberIds.map(id => ({ id, name: '' })))
     });
     // FIXME: Event:GroupRoomCreatedEvent
     await Store.ReadOffsetStore.createAll(
-        [writer.id, ...memberIds].map(id => ({
+        [writerId, ...memberIds].map(id => ({
             id: id.concat('@', roomId),
             userId: id,
             roomId,
-            offset: id === writer.id ? 0 : -1
+            offset: id === writerId ? 0 : -1
         }))
     );
-    await send(writer, message, roomId, true);
+    await send(writerId, message, roomId, true);
     return roomId;
 };
 

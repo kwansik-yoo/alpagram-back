@@ -10,13 +10,13 @@ const Repository = model(
 
 const ChatMongoStore: RoomStore = {
     create: async data => {
-        await new Repository({ ...data, _id: data.id }).save();
+        await new Repository(ODM.toDoc(data)).save();
         return data.id;
     },
     update: async (id, t) => {
         const isExists = await Repository.exists({ _id: id });
         if (isExists != null) {
-            await Repository.update({ _id: id }, t);
+            await Repository.update({ _id: id }, ODM.toDoc(t));
         }
         return id;
     },
@@ -25,7 +25,7 @@ const ChatMongoStore: RoomStore = {
         return id;
     },
     findById: async id => {
-        return ODM.mapper(await Repository.findById(id));
+        return ODM.fromDoc(await Repository.findById(id));
     }
 };
 

@@ -1,8 +1,10 @@
 import { Schema } from 'mongoose';
 
-export type OdmMapper<T> = (queryResult: any | null) => T | null;
+export type FromDoc<T> = (queryResult: any | null) => T | null;
+export type ToDoc<T> = (domain: T) => any;
 
 export interface Odm<T> {
-    mapper: OdmMapper<T>;
+    fromDoc: FromDoc<T>;
+    toDoc: ToDoc<T>;
     schema: Schema;
 }

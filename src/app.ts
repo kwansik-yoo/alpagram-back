@@ -13,6 +13,7 @@ void Store.configuration();
 app.use(bodyParser.json());
 
 app.use('/user', RestFacade.User);
+app.use('/chat', RestFacade.Chat);
 
 app.get('/', (req, res) => {
     res.send('Hello World!!!');

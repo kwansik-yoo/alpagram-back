@@ -10,14 +10,13 @@ const Repository = model(
 
 const UserAuthenticationMongoStore: UserAuthenticationStore = {
     create: async data => {
-        const { id, password } = data;
-        await new Repository({ _id: id, password }).save();
-        return id;
+        await new Repository(ODM.toDoc(data)).save();
+        return data.id;
     },
     update: async (id, t) => {
         const isExists = await Repository.exists({ _id: id });
         if (isExists != null) {
-            await Repository.update({ _id: id }, t);
+            await Repository.update({ _id: id }, ODM.toDoc(t));
         }
         return id;
     },
@@ -26,7 +25,7 @@ const UserAuthenticationMongoStore: UserAuthenticationStore = {
         return id;
     },
     findById: async id => {
-        return ODM.mapper(await Repository.findById(id));
+        return ODM.fromDoc(await Repository.findById(id));
     }
 };
 

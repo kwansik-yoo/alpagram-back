@@ -1,9 +1,9 @@
 import { Schema } from 'mongoose';
 import { Odm } from '../../odm';
-import { DirectChatRoom, GroupChatRoom, Room } from '../../../../types/chat';
+import { GenericRoom } from '../../../../types/chat';
 
-const odm: Odm<DirectChatRoom | GroupChatRoom> = {
-    mapper: queryResult => {
+const odm: Odm<GenericRoom> = {
+    fromDoc: queryResult => {
         if (queryResult === null) {
             return null;
         }
@@ -37,10 +37,31 @@ const odm: Odm<DirectChatRoom | GroupChatRoom> = {
             };
         }
     },
+    toDoc: room => {
+        const doc = { _id: room.id, offset: room.offset, type: room.type };
+        if (room.type === 'direct') {
+            return {
+                ...doc,
+                directMeta: {
+                    eliceId: room.elice.id,
+                    bobId: room.bob.id
+                }
+            };
+        } else {
+            return {
+                ...doc,
+                groupMeta: {
+                    ownerId: room.owner.id,
+                    adminIds: room.admins.map(admin => admin.id),
+                    memberIds: room.members.map(member => member.id)
+                }
+            };
+        }
+    },
     schema: new Schema({
         _id: String,
         offset: Number,
-        type: ['direct', 'group'],
+        type: { type: String, enum: ['direct', 'group'] },
         directMeta: {
             eliceId: String,
             bobId: String
