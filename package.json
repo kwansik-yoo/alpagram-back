@@ -5,12 +5,14 @@
   "private": true,
   "scripts": {
     "start": "ts-node src/app.ts",
-    "dev": "nodemon --config config/nodemon.json --exec ts-node src/app.ts"
+    "dev": "yarn swagger-gen && nodemon --config config/nodemon.json --exec ts-node src/app.ts",
+    "swagger-gen": "ts-node src/swagger/generate.ts"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.8.0",
+    "swagger-autogen": "^2.22.0",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.6.0",
     "uuid": "^9.0.0"

@@ -1,9 +1,9 @@
-import express, { Request } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import { config } from 'dotenv';
 import swaggerUI from 'swagger-ui-express';
 //
-import swaggerDoc from './swagger/sample.json';
+import swaggerDoc from './swagger/swagger-gen.json';
 import RestFacade from './facade/rest';
 import Store from './store';
 
