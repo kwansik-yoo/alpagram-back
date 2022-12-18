@@ -1,7 +1,9 @@
-import express from 'express';
+import express, { Request } from 'express';
 import bodyParser from 'body-parser';
 import { config } from 'dotenv';
+import swaggerUI from 'swagger-ui-express';
 //
+import swaggerDoc from './swagger/sample.json';
 import RestFacade from './facade/rest';
 import Store from './store';
 
@@ -14,6 +16,9 @@ app.use(bodyParser.json());
 
 app.use('/user', RestFacade.User);
 app.use('/chat', RestFacade.Chat);
+
+// swagger
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, { explorer: true }));
 
 app.get('/', (req, res) => {
     res.send('Hello World!!!');
