@@ -19,7 +19,7 @@ router.post('/log-in', async (req, res) => {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.post('/log-in', async (req, res) => {
+router.post('/log-out', async (req, res) => {
     const { id } = req.body;
     const result = await Logic.UserLogic.logout(id);
     res.send(result);

@@ -9,19 +9,22 @@ const Repository = model(
 );
 
 const UserAuthenticationMongoStore: UserAuthenticationStore = {
-    create: async data => {
-        await new Repository(ODM.toDoc(data)).save();
+    create: async (data, session) => {
+        if (data.password === 'error') {
+            throw new Error('password is error');
+        }
+        await Repository.create([ODM.toDoc(data)], { session });
         return data.id;
     },
-    update: async (id, t) => {
-        const isExists = await Repository.exists({ _id: id });
+    update: async (id, t, session) => {
+        const isExists = await Repository.exists({ _id: id }).session(session ?? null);
         if (isExists != null) {
-            await Repository.update({ _id: id }, ODM.toDoc(t));
+            await Repository.update({ _id: id }, ODM.toDoc(t), { session });
         }
         return id;
     },
-    delete: async id => {
-        await Repository.deleteOne({ _id: id });
+    delete: async (id, session) => {
+        await Repository.deleteOne({ _id: id }, { session });
         return id;
     },
     findById: async id => {

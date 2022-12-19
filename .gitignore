@@ -9,3 +9,4 @@ yarn-error.log
 
 # data
 src/store/disk/storage/*.json
+.env

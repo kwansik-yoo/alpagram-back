@@ -1,5 +1,6 @@
 import { User } from '../types/user';
 import Store from '../store';
+import mongoose from 'mongoose';
 
 const signUp = async (id: string, name: string, password: string): Promise<string> => {
     // id check
@@ -7,11 +8,15 @@ const signUp = async (id: string, name: string, password: string): Promise<strin
     if (predefinedUser !== null) {
         throw new Error(`User with id(${id}} is already registered.`);
     }
-    // register user
-    await Store.UserStore.create({ id, name });
 
-    // register useAuthentication
-    await Store.UserAuthenticateStore.create({ id, password });
+    const session = await mongoose.startSession();
+    await session.withTransaction(async () => {
+        // register user
+        await Store.UserStore.create({ id, name }, session);
+
+        // register useAuthentication
+        await Store.UserAuthenticateStore.create({ id, password }, session);
+    });
 
     // welcome message
     // TODO
