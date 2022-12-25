@@ -4,8 +4,9 @@ import { config } from 'dotenv';
 import swaggerUI from 'swagger-ui-express';
 //
 import swaggerDoc from './swagger/swagger-gen.json';
-import RestFacade from './facade/rest';
+import RestFacade from './rest';
 import Store from './store';
+import subscribe from './event/handler';
 
 const app = express();
 config();
@@ -23,6 +24,9 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, { explorer: tr
 app.get('/', (req, res) => {
     res.send('Hello World!!!');
 });
+
+// events
+subscribe();
 
 app.listen(process.env.PORT, () => {
     console.log(`Example app listening on port ${process.env.PORT ?? ''}`);

@@ -1,5 +1,7 @@
 import Store from '../store';
 import { randomUUID } from 'crypto';
+import EventProxy from '../event/EventProxy';
+import { ChatSendEvent } from '../event/types';
 
 const send = async (
     writerId: string,
@@ -19,7 +21,12 @@ const send = async (
 
     // FIXME: Event
     if (!initial) {
-        await addRoomOffset(roomId);
+        // await addRoomOffset(roomId);
+        const event: ChatSendEvent = {
+            key: 'ChatSendEvent',
+            payload: { roomId }
+        };
+        EventProxy.publish(event);
     }
 
     return id;
@@ -91,5 +98,6 @@ const addRoomOffset = async (roomId: string): Promise<void> => {
 export default {
     send,
     sendFirstDirectMessage,
-    sendFirstGroupMessage
+    sendFirstGroupMessage,
+    addRoomOffset
 };
